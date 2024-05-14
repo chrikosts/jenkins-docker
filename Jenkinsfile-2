@@ -1,0 +1,25 @@
+pipeline {
+  agent {
+    docker { image 'node:16-alpine' }
+  }
+  stages {
+    stage('Test') {
+      steps {
+        sh 'node --version'
+      }
+    }
+    stage('Get Jenkins Agent IP') {
+      steps {
+        script {
+          def hostname = sh(script: 'hostname', returnStdout: true).trim()
+          echo "Jenkins Agent Hostname: ${hostname}"
+          def ipAddress = sh(
+            returnStdout: true,
+            script: "hostname -i"
+          ).trim()
+          echo "The IP of the Jenkins Agent: $ipAddress"
+        }
+      }
+    }
+  }
+}
